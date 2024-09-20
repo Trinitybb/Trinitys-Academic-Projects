@@ -1,0 +1,309 @@
+ 
+
+#include <stdio.h> 
+
+#include <string.h> 
+
+#include <stdlib.h> 
+
+ 
+
+ 
+
+ 
+
+#define max_c 20 
+
+#define MAX_NAME_LENGTH 50 
+
+#define MAX_PHONE_LENGTH 20 
+
+ 
+
+ 
+
+ 
+
+struct Contact { 
+
+    char firstname[MAX_NAME_LENGTH]; 
+
+    char lastname[MAX_NAME_LENGTH]; 
+
+    char phoneNumber[MAX_PHONE_LENGTH]; 
+
+}; 
+
+ 
+
+struct Contact contacts[max_c]; 
+
+int numContacts = 0; 
+
+ 
+
+int contactCount = 15; // Total number of contacts currently stored 
+
+ 
+
+void addContact() 
+
+{    if (contactCount >= max_c) { 
+
+        printf("Enter firstname: "); 
+
+        scanf("%s", contacts[contactCount].firstname); 
+
+        printf("Enter lastname: "); 
+
+        scanf("%s", contacts[contactCount].lastname); 
+
+        printf("Enter phone number: "); 
+
+        scanf("%s", contacts[contactCount].phoneNumber); 
+
+        contactCount++; 
+
+        printf("Contact added successfully!\n"); 
+
+    } else { 
+
+        printf("Maximum number of contacts reached.\n"); 
+
+    } 
+
+} 
+
+ 
+
+void searchPhoneNumber(char lastname[]) { 
+
+      char searchLastName[MAX_NAME_LENGTH]; 
+
+        printf("Enter last name to search: "); 
+
+        scanf("%s", searchLastName); 
+
+ 
+
+        int i; 
+
+        for (i = 0; i < numContacts; i++) { 
+
+            if (strcmp(contacts[i].lastname, searchLastName) == 0) { 
+
+                printf("Phone number: %s\n", contacts[i].phoneNumber); 
+
+                return; 
+
+            } 
+
+        } 
+
+ 
+
+        printf("Contact not found.\n"); 
+
+    } 
+
+ 
+
+ 
+
+void deleteContact(char lastname[]) { 
+
+    for (int i = 0; i < contactCount; i++) { 
+
+        if (strcmp(contacts[i].lastname, lastname) == 0) { 
+
+            contacts[i] = contacts[contactCount - 1]; 
+
+            contactCount--; 
+
+            printf("Contact deleted successfully!\n"); 
+
+            return; 
+
+        } 
+
+    } 
+
+    printf("Contact not found.\n"); 
+
+} 
+
+ 
+
+void updatePhoneNumber(char lastname[]) { 
+
+    char updateLastName[MAX_NAME_LENGTH]; 
+
+        printf("Enter last name to update: "); 
+
+        scanf("%s", updateLastName); 
+
+ 
+
+        int i; 
+
+        for (i = 0; i < numContacts; i++) { 
+
+            if (strcmp(contacts[i].lastname, updateLastName) == 0) { 
+
+                printf("Enter new phone number: "); 
+
+                scanf("%s", contacts[i].phoneNumber); 
+
+                printf("Contact updated successfully.\n"); 
+
+                return; 
+
+            } 
+
+        } 
+
+ 
+
+        printf("Contact not found.\n"); 
+
+    } 
+
+ 
+
+ 
+
+void displayContactsSorted() { 
+
+    struct Contact temp; 
+
+    for (int i = 0; i < contactCount - 1; i++) { 
+
+        for (int j = 0; j < contactCount - i - 1; j++) { 
+
+            if (strcmp(contacts[j].lastname, contacts[j + 1].lastname) > 0) { 
+
+                temp = contacts[j]; 
+
+                contacts[j] = contacts[j + 1]; 
+
+                contacts[j + 1] = temp; 
+
+            } 
+
+        } 
+
+    } 
+
+ 
+
+    printf("Contacts sorted by last name:\n"); 
+
+    for (int i = 0; i < contactCount; i++) { 
+
+        printf("%s %s - \n", contacts[i].firstname, contacts[i].lastname);   
+
+          printf("Phone: %s\n", contacts[i].phoneNumber); 
+
+    } 
+
+} 
+
+ 
+
+int main() { 
+
+    int choice; 
+
+    char lastname[50]; 
+
+ 
+
+    while (1) { 
+
+        printf("\nContact Management System\n"); 
+
+        printf("1. Add New Contact\n"); 
+
+  printf("2. Search Phone Number\n"); 
+
+        printf("3. Delete Contact\n"); 
+
+        printf("4. Update Phone Number\n"); 
+
+        printf("5. Display All Contacts Sorted by Last Name\n"); 
+
+        printf("6. Exit\n"); 
+
+        printf("Enter your choice: "); 
+
+        scanf("%d", &choice); 
+
+ 
+
+        switch (choice) { 
+
+            case 1: 
+
+                addContact(); 
+
+                break; 
+
+            case 2: 
+
+                printf("Enter contact last name: "); 
+
+                scanf("%s", lastname); 
+
+                searchPhoneNumber(lastname); 
+
+                break; 
+
+            case 3: 
+
+                printf("Enter contact last name: "); 
+
+                scanf("%s", lastname); 
+
+                deleteContact(lastname); 
+
+                break; 
+
+            case 4: 
+
+                printf("Enter contact last name: "); 
+
+                scanf("%s", lastname); 
+
+                updatePhoneNumber(lastname); 
+
+                break; 
+
+            case 5: 
+
+                displayContactsSorted(); 
+
+                break; 
+
+            case 6: 
+
+                printf("Exiting...\n"); 
+
+                return 0; 
+
+            default: 
+
+                printf("Invalid choice. Please try again.\n"); 
+
+        } 
+
+    } 
+
+    return 0; 
+
+    } 
+
+     
+
+ 
+
+ 
