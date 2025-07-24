@@ -1,0 +1,32 @@
+# WebSocket Server (server.py)
+# This server uses Python's websockets and asyncio libraries to handle multiple client connections
+# and broadcast received messages to all connected clients (like a basic group chat).
+
+import asyncio  # Provides support for asynchronous operations
+import websockets  # WebSocket protocol support for asynchronous communication
+
+# A set to keep track of all connected clients
+connected_clients = set()
+
+# This is the main function that handles communication with clients
+async def echo(websocket, path):
+    connected_clients.add(websocket)  # Add new client to the connected clients set
+    try:
+        # Receive messages from this client
+        async for message in websocket:
+            # Send the message to all other connected clients
+            for client in connected_clients:
+                if client != websocket:
+                    await client.send(message)
+    finally:
+        # Remove the client from the set when the connection is closed
+        connected_clients.remove(websocket)
+
+# Create the WebSocket server listening on localhost at port 8765
+start_server = websockets.serve(echo, "localhost", 8765)
+
+print("WebSocket server running on ws://localhost:8765")
+
+# Start the event loop to run the server
+asyncio.get_event_loop().run_until_complete(start_server)
+asyncio.get_event_loop().run_forever()
